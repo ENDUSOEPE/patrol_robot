@@ -1,0 +1,117 @@
+
+#include <AFMotor.h>
+
+AF_DCMotor motor1(1);
+AF_DCMotor motor2(2);
+AF_DCMotor motor3(3);
+AF_DCMotor motor4(4);
+
+int distance1;
+int distance2;
+int distance3;
+
+int trig1=A2;
+int echo1=A3;
+int trig2=A0;
+int echo2=A1;
+int trig3=A4;
+int echo3=A5;
+int i;
+
+void setup() {
+  
+  motor1.setSpeed(200);
+  motor2.setSpeed(150);
+  motor3.setSpeed(200);
+  motor4.setSpeed(250);
+
+  pinMode(trig1,OUTPUT);
+  pinMode(echo1,INPUT);
+  pinMode(trig2,OUTPUT);
+  pinMode(echo2,INPUT);
+  pinMode(trig3,OUTPUT);
+  pinMode(echo3,INPUT);
+  
+  // put your setup code here, to run once:
+
+}
+
+ void GO(){
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+}
+
+void LEFT(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+    
+    
+}
+
+void RIGHT(){
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void BACK(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void RELEASE_ALL(){
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  motor3.run(RELEASE);
+  motor4.run(RELEASE);
+}
+
+void DISTANCE(){
+  digitalWrite(trig1,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig1,LOW);
+  distance1=0.01723*pulseIn(echo1,HIGH);
+  delay(10);
+
+  digitalWrite(trig2,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig2,LOW);
+  distance2=0.01723*pulseIn(echo2,HIGH);
+  delay(10);
+
+  digitalWrite(trig3,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig3,LOW);
+  distance3=0.01723*pulseIn(echo3,HIGH);
+  delay(10);
+  
+}
+void loop() {
+  DISTANCE();
+  GO();
+  if(distance1 > 15)
+ {
+  GO();
+ }
+ else{
+  RELEASE_ALL();
+  delay(500);
+  i=random(0,2);
+  if(i=0){
+    RIGHT();
+    delay(3000);
+    }
+  else{
+    LEFT();
+    delay(2200);
+  }  
+ }
+}
+  
