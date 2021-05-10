@@ -1,0 +1,129 @@
+#include <AFMotor.h>
+
+AF_DCMotor motor1(1);
+AF_DCMotor motor2(2);
+AF_DCMotor motor3(3);
+AF_DCMotor motor4(4);
+
+int distance1;
+int distance2;
+int distance3;
+int distance4;
+
+
+int trig2=A3;
+int echo2=A2;
+int trig3=A5;
+int echo3=A4;
+int trig1=A1;
+int echo1=A0;
+int i;
+
+void setup() {
+  
+  motor1.setSpeed(200);
+  motor2.setSpeed(150);
+  motor3.setSpeed(200);
+  motor4.setSpeed(250);
+
+  pinMode(trig1,OUTPUT);
+  pinMode(echo1,INPUT);
+  pinMode(trig2,OUTPUT);
+  pinMode(echo2,INPUT);
+  pinMode(trig3,OUTPUT);
+  pinMode(echo3,INPUT);
+  
+  // put your setup code here, to run once:
+
+}
+
+ void GO(){
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+}
+
+void LEFT(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+    
+    
+}
+
+void RIGHT(){
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void BACK(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void STOP(){
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  motor3.run(RELEASE);
+  motor4.run(RELEASE);
+}
+
+void Uturn(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+  delay(3000);
+}
+
+void DISTANCE(){
+  digitalWrite(trig1,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig1,LOW);
+  distance1=0.01723*pulseIn(echo1,HIGH);
+  delay(10);
+
+  digitalWrite(trig2,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig2,LOW);
+  distance2=0.01723*pulseIn(echo2,HIGH);
+  delay(10);
+
+  digitalWrite(trig3,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig3,LOW);
+  distance3=0.01723*pulseIn(echo3,HIGH);
+  delay(10);
+
+
+  
+}
+
+void loop() {
+  DISTANCE();
+  GO();
+  if(distance1<=15&&distance2>15){
+    RIGHT();
+    delay(1700);
+  }
+  else if(distance1>15&&distance2<=15){
+    LEFT();
+    delay(1300);
+  }
+  else if(distance1<=15&&distance2<=15){
+    i=random(0,2);
+    if(i=0){
+      RIGHT();
+      delay(1700);
+    }
+    else{
+      LEFT();
+      delay(1300);
+    }
+  }
