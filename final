@@ -1,0 +1,197 @@
+#include <AFMotor.h>
+
+AF_DCMotor motor1(1);
+AF_DCMotor motor2(2);
+AF_DCMotor motor3(3);
+AF_DCMotor motor4(4);
+
+int distance1;
+int distance2;
+int distance3;
+int distance4;
+int distance12;
+int distance22;
+int trig4=A5;
+int echo4=A4;
+int trig2=A3;
+int echo2=A2;
+int trig1=A1;
+int echo1=A0;
+int trig3=9;
+int echo3=10;
+int i;
+unsigned long preTime;
+
+void setup() {
+  Serial.begin(9600);
+  motor1.setSpeed(200);
+  motor2.setSpeed(150);
+  motor3.setSpeed(200);
+  motor4.setSpeed(250);
+
+  pinMode(trig1,OUTPUT);
+  pinMode(echo1,INPUT);
+  pinMode(trig2,OUTPUT);
+  pinMode(echo2,INPUT);
+  pinMode(trig3,OUTPUT);
+  pinMode(echo3,INPUT);
+  pinMode(trig4,OUTPUT);
+  pinMode(echo4,INPUT);
+  
+  // put your setup code here, to run once:
+
+}
+
+ void GO(){
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+}
+
+void LEFT(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+    
+    
+}
+
+void RIGHT(){
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void BACK(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void STOP(){
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  motor3.run(RELEASE);
+  motor4.run(RELEASE);
+}
+
+void Uturn(){
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+  delay(3000);
+}
+
+void DISTANCE(){
+  digitalWrite(trig1,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig1,LOW);
+  distance1=0.01723*pulseIn(echo1,HIGH);
+  delay(10);
+
+  digitalWrite(trig2,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig2,LOW);
+  distance2=0.01723*pulseIn(echo2,HIGH);
+  delay(10);
+
+  digitalWrite(trig3,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig3,LOW);
+  distance3=0.01723*pulseIn(echo3,HIGH);
+  delay(10);
+
+  digitalWrite(trig4,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig4,LOW);
+  distance4=0.01723*pulseIn(echo4,HIGH);
+  delay(10);
+
+
+  
+}
+
+
+void loop() {
+  DISTANCE();
+  GO();
+  if(distance1<=15){
+    STOP();
+    delay(2000);
+    DISTANCE();
+    if(distance1<=15){
+      if(distance3<=15&&distance4>15){
+        RIGHT();
+        delay(2000);
+        STOP();
+        delay(500);
+      }
+      else if(distance3>15&&distance4<=15){
+       LEFT();
+       delay(1800);
+       STOP();
+       delay(500); 
+      }
+      else if(distance3<=15&&distance4<=15){
+        STOP();
+      }
+      else{
+        i=random(0,2);
+        if(i==0){
+          RIGHT();
+          delay(2000);
+          STOP();
+          delay(500);
+        }
+        else{
+          LEFT();
+          delay(1800);
+          STOP();
+          delay(500);
+        }
+      }
+    }
+  }
+    if(distance2<=15){
+      STOP();
+      delay(2000);
+      DISTANCE();
+      if(distance2<=15){
+        if(distance3<=15&&distance4>15){
+          RIGHT();
+          delay(2000);
+          STOP();
+          delay(500);
+        }
+        else if(distance3>15&&distance4<=15){
+          LEFT();
+          delay(1800);
+          STOP();
+          delay(500); 
+        }
+        else if(distance3<=15&&distance4<=15){
+          STOP();
+        }
+        else{
+          i=random(0,2);
+          if(i==0){
+            RIGHT();
+            delay(2000);
+            STOP();
+            delay(500);
+          }
+          else{
+            LEFT();
+            delay(1800);
+            STOP();
+            delay(500);
+          }
+        }
+      }
+    }
+  }
